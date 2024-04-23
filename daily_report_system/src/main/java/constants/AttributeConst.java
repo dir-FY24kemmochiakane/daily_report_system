@@ -1,12 +1,7 @@
 package constants;
 
-/**
- * 画面の項目値等を定義するEnumクラス
- *
- */
 public enum AttributeConst {
-
-    //フラッシュメッセージ
+  //フラッシュメッセージ
     FLUSH("flush"),
 
     //一覧画面共通
@@ -70,5 +65,4 @@ public enum AttributeConst {
     public Integer getIntegerValue() {
         return this.i;
     }
-
 }

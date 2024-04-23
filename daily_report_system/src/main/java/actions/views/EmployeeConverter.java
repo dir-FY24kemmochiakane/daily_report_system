@@ -5,9 +5,7 @@ import java.util.List;
 
 import constants.AttributeConst;
 import constants.JpaConst;
-//import models.Employee;
 import models.Employee;
-
 
 /**
  * 従業員データのDTOモデル⇔Viewモデルの変換を行うクラス
@@ -40,7 +38,7 @@ public class EmployeeConverter {
                                 ? JpaConst.EMP_DEL_TRUE
                                 : JpaConst.EMP_DEL_FALSE);
     }
-
+    
     /**
      * DTOモデルのインスタンスからViewモデルのインスタンスを作成する
      * @param e Employeeのインスタンス
@@ -70,7 +68,6 @@ public class EmployeeConverter {
                                 ? AttributeConst.DEL_FLAG_TRUE.getIntegerValue()
                                 : AttributeConst.DEL_FLAG_FALSE.getIntegerValue());
     }
-
     /**
      * DTOモデルのリストからViewモデルのリストを作成する
      * @param list DTOモデルのリスト
