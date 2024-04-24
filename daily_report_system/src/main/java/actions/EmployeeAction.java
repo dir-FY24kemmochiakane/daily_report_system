@@ -25,23 +25,23 @@ public class EmployeeAction extends ActionBase {
     /**
      * メソッドを実行する
      */
-    @Override
-    public void process() throws ServletException, IOException {
+        @Override
+        public void process() throws ServletException, IOException {
+    
+            service = new EmployeeService();
+    
+            //メソッドを実行
+            invoke();
+    
+            service.close();
+        }
 
-        service = new EmployeeService();
-
-        //メソッドを実行
-        invoke();
-
-        service.close();
-    }
-
-    /**
-     * 一覧画面を表示する
-     * @throws ServletException
-     * @throws IOException
-     */
-    public void index() throws ServletException, IOException {
+        /**
+         * 一覧画面を表示する
+         * @throws ServletException
+         * @throws IOException
+         */
+        public void index() throws ServletException, IOException {
 
         //指定されたページ数の一覧画面に表示するデータを取得
         int page = getPage();
@@ -66,32 +66,32 @@ public class EmployeeAction extends ActionBase {
         forward(ForwardConst.FW_EMP_INDEX);
 
     }
-    /**
-     * 新規登録画面を表示する
-     * @throws ServletException
-     * @throws IOException
-     */
+        /**
+         * 新規登録画面を表示する
+         * @throws ServletException
+         * @throws IOException
+         */
+        
+        public void entryNew() throws ServletException, IOException {
     
-    public void entryNew() throws ServletException, IOException {
-
-        putRequestScope(AttributeConst.TOKEN, getTokenId()); //CSRF対策用トークン
-        putRequestScope(AttributeConst.EMPLOYEE, new EmployeeView()); //空の従業員インスタンス
-
-        //新規登録画面を表示
-        forward(ForwardConst.FW_EMP_NEW);
-    }
+            putRequestScope(AttributeConst.TOKEN, getTokenId()); //CSRF対策用トークン
+            putRequestScope(AttributeConst.EMPLOYEE, new EmployeeView()); //空の従業員インスタンス
+    
+            //新規登録画面を表示
+            forward(ForwardConst.FW_EMP_NEW);
+        }
 
 
 
-/**
- * 新規登録を行う
- * @throws ServletException
- * @throws IOException
- */
-public void create() throws ServletException, IOException {
-
-    //CSRF対策 tokenのチェック
-    if (checkToken()) {
+        /**
+         * 新規登録を行う
+         * @throws ServletException
+         * @throws IOException
+         */
+        public void create() throws ServletException, IOException {
+        
+            //CSRF対策 tokenのチェック
+            if (checkToken()) {
 
         //パラメータの値を元に従業員情報のインスタンスを作成する
         EmployeeView ev = new EmployeeView(
@@ -132,4 +132,26 @@ public void create() throws ServletException, IOException {
 
     }
 }
+        /**
+         * 詳細画面を表示する
+         * @throws ServletException
+         * @throws IOException
+         */
+        public void show() throws ServletException, IOException {
+        
+            //idを条件に従業員データを取得する
+            EmployeeView ev = service.findOne(toNumber(getRequestParam(AttributeConst.EMP_ID)));
+        
+            if (ev == null || ev.getDeleteFlag() == AttributeConst.DEL_FLAG_TRUE.getIntegerValue()) {
+        
+                //データが取得できなかった、または論理削除されている場合はエラー画面を表示
+                forward(ForwardConst.FW_ERR_UNKNOWN);
+                return;
+            }
+        
+            putRequestScope(AttributeConst.EMPLOYEE, ev); //取得した従業員情報
+        
+            //詳細画面を表示
+            forward(ForwardConst.FW_EMP_SHOW);
+        }
 }
